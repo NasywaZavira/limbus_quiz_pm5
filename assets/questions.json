@@ -1,0 +1,146 @@
+[
+  {
+    "question": "Sinner Yi Sang terinspirasi dari karya sastra apa?",
+    "options": [
+      "Hell Screen (Akutagawa Ryūnosuke)",
+      "Kokoro (Natsume Sōseki)",
+      "The Wings (Yi Sang)",
+      "The Cloud Dream of the Nine (Kim Man-jung)"
+    ],
+    "answerIndex": 2,
+    "category": "Sinner",
+    "explanation": "Yi Sang adalah sastrawan Korea, dan The Wings adalah salah satu karya pentingnya."
+  },
+  {
+    "question": "Sinner Faust terinspirasi dari karya sastra apa?",
+    "options": [
+      "Faust (Johann Wolfgang von Goethe)",
+      "Hamlet (William Shakespeare)",
+      "Paradise Lost (John Milton)",
+      "The Sorrows of Young Werther (Johann Wolfgang von Goethe)"
+    ],
+    "answerIndex": 0,
+    "category": "Sinner",
+    "explanation": "Faust adalah drama karya Goethe tentang seorang sarjana yang membuat perjanjian dengan iblis."
+  },
+  {
+    "question": "Sinner Don Quixote terinspirasi dari karya sastra apa?",
+    "options": [
+      "Gulliver's Travels (Jonathan Swift)",
+      "Candide (Voltaire)",
+      "The Divine Comedy (Dante Alighieri)",
+      "Don Quixote (Miguel de Cervantes)"
+    ],
+    "answerIndex": 3,
+    "category": "Sinner",
+    "explanation": "Don Quixote adalah novel Spanyol tentang seorang bangsawan yang menganggap dirinya ksatria pengembara."
+  },
+  {
+    "question": "Sinner Ryōshū terinspirasi dari karya sastra apa?",
+    "options": [
+      "No Longer Human (Osamu Dazai)",
+      "Hell Screen (Akutagawa Ryūnosuke)",
+      "Kokoro (Natsume Sōseki)",
+      "The Wings (Yi Sang)"
+    ],
+    "answerIndex": 1,
+    "category": "Sinner",
+    "explanation": "Hell Screen adalah cerpen Jepang tentang seorang pelukis yang terobsesi menyelesaikan lukisan neraka."
+  },
+  {
+    "question": "Sinner Meursault terinspirasi dari karya sastra apa?",
+    "options": [
+      "The Stranger (Albert Camus)",
+      "The Plague (Albert Camus)",
+      "Nausea (Jean-Paul Sartre)",
+      "Notes from Underground (Fyodor Dostoevsky)"
+    ],
+    "answerIndex": 0,
+    "category": "Sinner",
+    "explanation": "Meursault adalah tokoh utama novel The Stranger karya Albert Camus."
+  },
+  {
+    "question": "Sinner Hong Lu terinspirasi dari karya sastra apa?",
+    "options": [
+      "Journey to the West (Wu Cheng'en)",
+      "Romance of the Three Kingdoms (Luo Guanzhong)",
+      "Water Margin (Shi Nai'an)",
+      "Dream of the Red Chamber (Cao Xueqin)"
+    ],
+    "answerIndex": 3,
+    "category": "Sinner",
+    "explanation": "Dream of the Red Chamber adalah salah satu empat novel klasik Tiongkok."
+  },
+  {
+    "question": "Sinner Heathcliff terinspirasi dari karya sastra apa?",
+    "options": [
+      "Jane Eyre (Charlotte Brontë)",
+      "Wuthering Heights (Emily Brontë)",
+      "Pride and Prejudice (Jane Austen)",
+      "Great Expectations (Charles Dickens)"
+    ],
+    "answerIndex": 1,
+    "category": "Sinner",
+    "explanation": "Heathcliff adalah tokoh utama pria dalam novel Wuthering Heights."
+  },
+  {
+    "question": "Sinner Ishmael terinspirasi dari karya sastra apa?",
+    "options": [
+      "The Old Man and the Sea (Ernest Hemingway)",
+      "Treasure Island (Robert Louis Stevenson)",
+      "Moby-Dick (Herman Melville)",
+      "Robinson Crusoe (Daniel Defoe)"
+    ],
+    "answerIndex": 2,
+    "category": "Sinner",
+    "explanation": "Ishmael adalah narator novel Moby-Dick."
+  },
+  {
+    "question": "Sinner Rodion terinspirasi dari karya sastra apa?",
+    "options": [
+      "Crime and Punishment (Fyodor Dostoevsky)",
+      "The Brothers Karamazov (Fyodor Dostoevsky)",
+      "Anna Karenina (Leo Tolstoy)",
+      "Les Misérables (Victor Hugo)"
+    ],
+    "answerIndex": 0,
+    "category": "Sinner",
+    "explanation": "Rodion Raskolnikov adalah tokoh utama novel Crime and Punishment."
+  },
+  {
+    "question": "Sinner Sinclair terinspirasi dari karya sastra apa?",
+    "options": [
+      "Siddhartha (Hermann Hesse)",
+      "Demian (Hermann Hesse)",
+      "The Magic Mountain (Thomas Mann)",
+      "The Sorrows of Young Werther (Johann Wolfgang von Goethe)"
+    ],
+    "answerIndex": 1,
+    "category": "Sinner",
+    "explanation": "Emil Sinclair adalah tokoh utama novel Demian."
+  },
+  {
+    "question": "Sinner Outis terinspirasi dari karya sastra apa?",
+    "options": [
+      "The Odyssey (Homer)",
+      "The Iliad (Homer)",
+      "The Aeneid (Virgil)",
+      "The Divine Comedy (Dante Alighieri)"
+    ],
+    "answerIndex": 0,
+    "category": "Sinner",
+    "explanation": "Outis berarti \"tak seorang pun\", nama samaran yang dipakai Odysseus dalam The Odyssey."
+  },
+  {
+    "question": "Sinner Gregor terinspirasi dari karya sastra apa?",
+    "options": [
+      "The Trial (Franz Kafka)",
+      "Frankenstein (Mary Shelley)",
+      "The Strange Case of Dr Jekyll and Mr Hyde (Robert Louis Stevenson)",
+      "The Metamorphosis (Franz Kafka)"
+    ],
+    "answerIndex": 3,
+    "category": "Sinner",
+    "explanation": "Gregor Samsa adalah tokoh yang bangun dan mendapati dirinya berubah menjadi serangga raksasa."
+  }
+]
