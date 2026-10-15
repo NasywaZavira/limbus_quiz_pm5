@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../theme/limbus_theme.dart';
+import '../providers/quiz_provider.dart';
+import '../widgets/limbus_button.dart';
+import '../widgets/limbus_panel.dart';
 import 'quiz_screen.dart';
 
-/// Layar hasil: skor akhir, pesan singkat, dan pilihan main lagi.
+/// Layar hasil: skor akhir atas nama pemain, pesan singkat, dan pilihan lanjut.
 class ResultScreen extends StatelessWidget {
-  const ResultScreen({super.key, required this.score, required this.total});
+  const ResultScreen({super.key});
 
-  final int score;
-  final int total;
-
-  String get _message {
+  String _message(int score, int total) {
     final ratio = total == 0 ? 0.0 : score / total;
     if (ratio == 1) return 'Sempurna. Semua jawaban tepat.';
     if (ratio >= 0.7) return 'Bagus. Tinggal sedikit lagi.';
@@ -18,67 +18,76 @@ class ResultScreen extends StatelessWidget {
     return 'Belum banyak yang tepat. Coba lagi.';
   }
 
+  void _playAgain(BuildContext context) {
+    context.read<QuizProvider>().restart();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const QuizScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final quiz = context.watch<QuizProvider>();
     final text = Theme.of(context).textTheme;
+    final score = quiz.score;
+    final total = quiz.total;
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              Expanded(
-                child: Center(
-                  child: LimbusPanel(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 32),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Hasil', style: text.titleLarge),
-                        const SizedBox(height: 8),
-                        Text('$score / $total', style: text.displayLarge),
-                        const SizedBox(height: 8),
-                        Text(
-                          _message,
-                          textAlign: TextAlign.center,
-                          style: text.bodyLarge,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final pad = constraints.maxWidth * 0.06;
+
+            return SingleChildScrollView(
+              padding: EdgeInsets.all(pad),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight - pad * 2,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: LimbusPanel(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: pad,
+                          vertical: pad * 1.4,
                         ),
-                      ],
+                        child: Column(
+                          children: [
+                            Text('Skor ${quiz.playerName}',
+                                textAlign: TextAlign.center,
+                                style: text.titleLarge),
+                            SizedBox(height: pad * 0.3),
+                            Text('$score / $total', style: text.displayLarge),
+                            SizedBox(height: pad * 0.3),
+                            Text(
+                              _message(score, total),
+                              textAlign: TextAlign.center,
+                              style: text.bodyLarge,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) => const QuizScreen()),
-                  ),
-                  child: const Text('Main lagi'),
-                ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () =>
-                      Navigator.of(context).popUntil((route) => route.isFirst),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: LimbusColors.parchment,
-                    side: const BorderSide(color: LimbusColors.bronze, width: 2),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    textStyle: text.titleLarge,
-                    shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                    SizedBox(height: pad),
+                    LimbusButton(
+                      label: 'Main lagi',
+                      onPressed: () => _playAgain(context),
                     ),
-                  ),
-                  child: const Text('Kembali ke awal'),
+                    SizedBox(height: pad * 0.5),
+                    LimbusButton(
+                      label: 'Kembali ke awal',
+                      secondary: true,
+                      onPressed: () => Navigator.of(context)
+                          .popUntil((route) => route.isFirst),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
