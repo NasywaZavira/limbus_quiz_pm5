@@ -1,191 +1,129 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../data/question_repository.dart';
-import '../models/question.dart';
+import '../providers/quiz_provider.dart';
 import '../theme/limbus_theme.dart';
+import '../widgets/limbus_button.dart';
+import '../widgets/limbus_option_tile.dart';
+import '../widgets/limbus_panel.dart';
 import 'result_screen.dart';
 
-/// Layar kuis: memuat satu putaran soal, lalu menampilkannya satu per satu.
-class QuizScreen extends StatefulWidget {
-  const QuizScreen({
-    super.key,
-    this.repository = const QuestionRepository(),
-    this.roundSize = 10,
-  });
+/// Layar kuis. Seluruh progres dibaca dari [QuizProvider], jadi layar ini
+/// cukup StatelessWidget dan aman dirotasi atau ditinggalkan lalu dibuka lagi.
+class QuizScreen extends StatelessWidget {
+  const QuizScreen({super.key});
 
-  final QuestionRepository repository;
-  final int roundSize;
-
-  @override
-  State<QuizScreen> createState() => _QuizScreenState();
-}
-
-class _QuizScreenState extends State<QuizScreen> {
-  late Future<List<Question>> _future;
-
-  @override
-  void initState() {
-    super.initState();
-    _future = widget.repository.loadRound(count: widget.roundSize);
-  }
-
-  void _reload() {
-    setState(() {
-      _future = widget.repository.loadRound(count: widget.roundSize);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
-
-    return FutureBuilder<List<Question>>(
-      future: _future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        final questions = snapshot.data;
-        if (snapshot.hasError || questions == null || questions.isEmpty) {
-          return Scaffold(
-            appBar: AppBar(),
-            body: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('Soal gagal dimuat.', style: text.headlineMedium),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Periksa assets/questions.json dan daftar assets di pubspec.yaml.',
-                      textAlign: TextAlign.center,
-                      style: text.bodyMedium,
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _reload,
-                      child: const Text('Coba lagi'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }
-
-        return _QuizBody(questions: questions);
-      },
-    );
-  }
-}
-
-class _QuizBody extends StatefulWidget {
-  const _QuizBody({required this.questions});
-
-  final List<Question> questions;
-
-  @override
-  State<_QuizBody> createState() => _QuizBodyState();
-}
-
-class _QuizBodyState extends State<_QuizBody> {
-  int _index = 0;
-  int _score = 0;
-  int? _picked;
-
-  Question get _question => widget.questions[_index];
-  bool get _answered => _picked != null;
-  bool get _isLast => _index == widget.questions.length - 1;
-
-  void _pick(int i) {
-    if (_answered) return;
-    setState(() {
-      _picked = i;
-      if (_question.isCorrect(i)) _score++;
-    });
-  }
-
-  void _next() {
-    if (_isLast) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => ResultScreen(
-            score: _score,
-            total: widget.questions.length,
-          ),
-        ),
-      );
-    } else {
-      setState(() {
-        _index++;
-        _picked = null;
-      });
-    }
-  }
-
-  OptionState _stateFor(int i) {
-    if (!_answered) return OptionState.idle;
-    if (_question.isCorrect(i)) return OptionState.correct;
-    if (i == _picked) return OptionState.wrong;
+  OptionState _stateFor(QuizProvider quiz, int i) {
+    if (!quiz.isAnswered) return OptionState.idle;
+    if (quiz.currentQuestion.isCorrect(i)) return OptionState.correct;
+    if (i == quiz.pickedAnswer) return OptionState.wrong;
     return OptionState.idle;
   }
 
+  void _onNext(BuildContext context) {
+    final quiz = context.read<QuizProvider>();
+    final wasLast = quiz.isLastQuestion;
+    quiz.next();
+    if (wasLast) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const ResultScreen()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final quiz = context.watch<QuizProvider>();
     final text = Theme.of(context).textTheme;
-    final total = widget.questions.length;
-    final question = _question;
-    final gotItRight = _answered && question.isCorrect(_picked!);
+
+    if (quiz.isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    if (quiz.hasError || !quiz.hasQuestions) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.all(MediaQuery.sizeOf(context).width * 0.06),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Soal gagal dimuat.', style: text.headlineMedium),
+                const SizedBox(height: 8),
+                Text(
+                  'Periksa assets/questions.json dan daftar assets di pubspec.yaml.',
+                  textAlign: TextAlign.center,
+                  style: text.bodyMedium,
+                ),
+                const SizedBox(height: 20),
+                LimbusButton(
+                  label: 'Coba lagi',
+                  onPressed: () => context.read<QuizProvider>().restart(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    final question = quiz.currentQuestion;
+    final picked = quiz.pickedAnswer;
+    final gotItRight = picked != null && question.isCorrect(picked);
+    final pad = MediaQuery.sizeOf(context).width * 0.04;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Soal ${_index + 1} / $total'),
+        title: Text('Soal ${quiz.currentIndex + 1} / ${quiz.total}'),
         actions: [
           Center(
             child: Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Text('Skor $_score', style: text.titleLarge),
+              padding: EdgeInsets.only(right: pad),
+              child: Text('Skor ${quiz.score}', style: text.titleLarge),
             ),
           ),
         ],
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          padding: EdgeInsets.fromLTRB(pad, pad * 0.5, pad, pad),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Text('Peserta: ${quiz.playerName}', style: text.bodyMedium),
+              SizedBox(height: pad * 0.5),
               LinearProgressIndicator(
-                value: (_index + (_answered ? 1 : 0)) / total,
-                minHeight: 6,
+                value: (quiz.currentIndex + (quiz.isAnswered ? 1 : 0)) /
+                    quiz.total,
+                minHeight: pad * 0.4,
                 backgroundColor: LimbusColors.surface,
                 color: LimbusColors.orange,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: pad),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       LimbusPanel(
-                        padding: const EdgeInsets.all(20),
+                        padding: EdgeInsets.all(pad * 1.2),
                         child: Text(question.text, style: text.headlineMedium),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: pad * 1.2),
                       for (var i = 0; i < question.options.length; i++) ...[
                         LimbusOptionTile(
                           label: question.options[i],
-                          state: _stateFor(i),
-                          onTap: _answered ? null : () => _pick(i),
+                          state: _stateFor(quiz, i),
+                          onTap: quiz.isAnswered
+                              ? null
+                              : () => context
+                                  .read<QuizProvider>()
+                                  .selectAnswer(i),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: pad * 0.7),
                       ],
-                      if (_answered) ...[
-                        const SizedBox(height: 4),
+                      if (quiz.isAnswered)
                         LimbusPanel(
                           borderColor: gotItRight
                               ? LimbusColors.correct
@@ -194,33 +132,32 @@ class _QuizBodyState extends State<_QuizBody> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                gotItRight ? 'Benar' : 'Salah',
+                                gotItRight ? 'Benar' : 'Belum tepat',
                                 style: text.titleLarge,
                               ),
                               if (!gotItRight) ...[
-                                const SizedBox(height: 4),
+                                SizedBox(height: pad * 0.25),
                                 Text(
                                   'Jawaban yang benar: ${question.correctAnswer}',
                                   style: text.bodyLarge,
                                 ),
                               ],
                               if (question.explanation != null) ...[
-                                const SizedBox(height: 8),
+                                SizedBox(height: pad * 0.5),
                                 Text(question.explanation!,
                                     style: text.bodyMedium),
                               ],
                             ],
                           ),
                         ),
-                      ],
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: _answered ? _next : null,
-                child: Text(_isLast ? 'Lihat hasil' : 'Soal berikutnya'),
+              SizedBox(height: pad * 0.7),
+              LimbusButton(
+                label: quiz.isLastQuestion ? 'Lihat hasil' : 'Soal berikutnya',
+                onPressed: quiz.isAnswered ? () => _onNext(context) : null,
               ),
             ],
           ),
