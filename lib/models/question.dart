@@ -1,20 +1,21 @@
 import 'dart:math';
 
-/// Satu soal pilihan ganda.
 class Question {
   const Question({
     required this.text,
     required this.options,
     required this.answerIndex,
     required this.category,
-    this.explanation,
+    this.imagePath,
   });
 
   final String text;
   final List<String> options;
   final int answerIndex;
   final String category;
-  final String? explanation;
+
+  /// Path aset gambar (mis. potret Sinner), opsional.
+  final String? imagePath;
 
   String get correctAnswer => options[answerIndex];
 
@@ -35,12 +36,11 @@ class Question {
       options: options,
       answerIndex: answerIndex,
       category: json['category'] as String? ?? 'Umum',
-      explanation: json['explanation'] as String?,
+      imagePath: json['image'] as String?,
     );
   }
 
   /// Salinan soal dengan urutan pilihan diacak. Indeks jawaban benar
-  /// ikut disesuaikan, jadi aman dipakai langsung di layar kuis.
   Question withShuffledOptions([Random? random]) {
     final correct = correctAnswer;
     final shuffled = List<String>.of(options)..shuffle(random);
@@ -49,7 +49,7 @@ class Question {
       options: shuffled,
       answerIndex: shuffled.indexOf(correct),
       category: category,
-      explanation: explanation,
+      imagePath: imagePath,
     );
   }
 }
