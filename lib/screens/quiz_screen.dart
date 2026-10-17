@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,6 +8,8 @@ import '../theme/limbus_theme.dart';
 import '../widgets/limbus_button.dart';
 import '../widgets/limbus_option_tile.dart';
 import '../widgets/limbus_panel.dart';
+import '../widgets/quiz_clock.dart';
+import '../widgets/sinner_portrait.dart';
 import 'result_screen.dart';
 
 /// Layar kuis. Seluruh progres dibaca dari [QuizProvider], jadi layar ini
@@ -71,34 +75,42 @@ class QuizScreen extends StatelessWidget {
     final question = quiz.currentQuestion;
     final picked = quiz.pickedAnswer;
     final gotItRight = picked != null && question.isCorrect(picked);
-    final pad = MediaQuery.sizeOf(context).width * 0.04;
+    final screen = MediaQuery.sizeOf(context);
+    final pad = screen.width * 0.04;
+    // Ukuran jam mengikuti lebar layar, dibatasi tinggi agar aman di landscape.
+    final clockSize = math.min(screen.width * 0.22, screen.height * 0.16);
+    // Potret mengikuti lebar layar dan dibatasi tinggi agar aman di landscape.
+    final portraitWidth = math.min(screen.width * 0.45, screen.height * 0.26);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Soal ${quiz.currentIndex + 1} / ${quiz.total}'),
-        actions: [
-          Center(
-            child: Padding(
-              padding: EdgeInsets.only(right: pad),
-              child: Text('Skor ${quiz.score}', style: text.titleLarge),
-            ),
-          ),
-        ],
-      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.fromLTRB(pad, pad * 0.5, pad, pad),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Peserta: ${quiz.playerName}', style: text.bodyMedium),
-              SizedBox(height: pad * 0.5),
-              LinearProgressIndicator(
-                value: (quiz.currentIndex + (quiz.isAnswered ? 1 : 0)) /
-                    quiz.total,
-                minHeight: pad * 0.4,
-                backgroundColor: LimbusColors.surface,
-                color: LimbusColors.orange,
+              SizedBox(
+                width: double.infinity,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (question.imagePath != null)
+                      SinnerPortrait(
+                        imagePath: question.imagePath!,
+                        width: portraitWidth,
+                      ),
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      child: QuizClock(
+                        size: clockSize,
+                        total: quiz.total,
+                        currentIndex: quiz.currentIndex,
+                        results: quiz.results ?? const [],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: pad),
               Expanded(
@@ -117,9 +129,9 @@ class QuizScreen extends StatelessWidget {
                           state: _stateFor(quiz, i),
                           onTap: quiz.isAnswered
                               ? null
-                              : () => context
-                                  .read<QuizProvider>()
-                                  .selectAnswer(i),
+                              : () => context.read<QuizProvider>().selectAnswer(
+                                  i,
+                                ),
                         ),
                         SizedBox(height: pad * 0.7),
                       ],
@@ -141,11 +153,6 @@ class QuizScreen extends StatelessWidget {
                                   'Jawaban yang benar: ${question.correctAnswer}',
                                   style: text.bodyLarge,
                                 ),
-                              ],
-                              if (question.explanation != null) ...[
-                                SizedBox(height: pad * 0.5),
-                                Text(question.explanation!,
-                                    style: text.bodyMedium),
                               ],
                             ],
                           ),
