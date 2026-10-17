@@ -7,8 +7,6 @@ import 'theme/limbus_theme.dart';
 
 void main() {
   runApp(
-    // QuizProvider berada di atas MaterialApp agar progres bertahan
-    // selama aplikasi hidup, di semua halaman.
     ChangeNotifierProvider(
       create: (_) => QuizProvider(),
       child: const LimbusQuizApp(),
@@ -24,7 +22,10 @@ class LimbusQuizApp extends StatelessWidget {
     return MaterialApp(
       title: 'Limbus Quiz',
       debugShowCheckedModeBanner: false,
-      theme: buildLimbusTheme(),
+      builder: (context, child) {
+        final unit = MediaQuery.sizeOf(context).shortestSide / 100;
+        return Theme(data: buildLimbusTheme(unit), child: child!);
+      },
       home: const HomeScreen(),
     );
   }
