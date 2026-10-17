@@ -4,26 +4,10 @@ import 'package:provider/provider.dart';
 import '../providers/quiz_provider.dart';
 import '../widgets/limbus_button.dart';
 import '../widgets/limbus_panel.dart';
-import 'quiz_screen.dart';
 
 /// Layar hasil: skor akhir atas nama pemain, pesan singkat, dan pilihan lanjut.
 class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key});
-
-  String _message(int score, int total) {
-    final ratio = total == 0 ? 0.0 : score / total;
-    if (ratio == 1) return 'Sempurna. Semua jawaban tepat.';
-    if (ratio >= 0.7) return 'Bagus. Tinggal sedikit lagi.';
-    if (ratio >= 0.4) return 'Lumayan. Coba lagi untuk skor lebih tinggi.';
-    return 'Belum banyak yang tepat. Coba lagi.';
-  }
-
-  void _playAgain(BuildContext context) {
-    context.read<QuizProvider>().restart();
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const QuizScreen()),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,14 +40,16 @@ class ResultScreen extends StatelessWidget {
                         ),
                         child: Column(
                           children: [
-                            Text('Skor ${quiz.playerName}',
-                                textAlign: TextAlign.center,
-                                style: text.titleLarge),
+                            Text(
+                              'Skor ${quiz.playerName}',
+                              textAlign: TextAlign.center,
+                              style: text.titleLarge,
+                            ),
                             SizedBox(height: pad * 0.3),
                             Text('$score / $total', style: text.displayLarge),
                             SizedBox(height: pad * 0.3),
                             Text(
-                              _message(score, total),
+                              'Terima kasih telah bermain!',
                               textAlign: TextAlign.center,
                               style: text.bodyLarge,
                             ),
@@ -73,15 +59,10 @@ class ResultScreen extends StatelessWidget {
                     ),
                     SizedBox(height: pad),
                     LimbusButton(
-                      label: 'Main lagi',
-                      onPressed: () => _playAgain(context),
-                    ),
-                    SizedBox(height: pad * 0.5),
-                    LimbusButton(
                       label: 'Kembali ke awal',
-                      secondary: true,
-                      onPressed: () => Navigator.of(context)
-                          .popUntil((route) => route.isFirst),
+                      onPressed: () =>
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst),
                     ),
                   ],
                 ),
