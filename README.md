@@ -110,10 +110,10 @@ Catatan:
 
 | Halaman | Tampilan |
 |---|---|
-| Layar awal | <img src="docs/screenshots/home.jpg" alt="Layar awal" width="320" /> |
-| Layar kuis (sebelum menjawab) | <img src="docs/screenshots/quiz.jpg" alt="Kuis" width="320" /> |
-| Layar kuis (setelah menjawab) | <img src="docs/screenshots/quiz-answered.jpg" alt="Kuis setelah menjawab" width="320" /> |
-| Layar hasil | <img src="docs/screenshots/result.jpg" alt="Hasil" width="320" /> |
+| Layar awal | <img src="docs/screenshots/home.jpeg" alt="Layar awal" width="320" /> |
+| Layar kuis (sebelum menjawab) | <img src="docs/screenshots/quiz.jpeg" alt="Kuis" width="320" /> |
+| Layar kuis (setelah menjawab) | <img src="docs/screenshots/quiz-answered.jpeg" alt="Kuis setelah menjawab" width="320" /> |
+| Layar hasil | <img src="docs/screenshots/result.jpeg" alt="Hasil" width="320" /> |
 
 ### Mockup / Prototype
 
