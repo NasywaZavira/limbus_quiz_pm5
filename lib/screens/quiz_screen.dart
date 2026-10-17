@@ -12,8 +12,6 @@ import '../widgets/quiz_clock.dart';
 import '../widgets/sinner_portrait.dart';
 import 'result_screen.dart';
 
-/// Layar kuis. Seluruh progres dibaca dari [QuizProvider], jadi layar ini
-/// cukup StatelessWidget dan aman dirotasi atau ditinggalkan lalu dibuka lagi.
 class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key});
 
@@ -39,6 +37,7 @@ class QuizScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final quiz = context.watch<QuizProvider>();
     final text = Theme.of(context).textTheme;
+    final unit = MediaQuery.sizeOf(context).shortestSide / 100;
 
     if (quiz.isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -54,13 +53,13 @@ class QuizScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text('Soal gagal dimuat.', style: text.headlineMedium),
-                const SizedBox(height: 8),
+                SizedBox(height: unit * 2),
                 Text(
                   'Periksa assets/questions.json dan daftar assets di pubspec.yaml.',
                   textAlign: TextAlign.center,
                   style: text.bodyMedium,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: unit * 5),
                 LimbusButton(
                   label: 'Coba lagi',
                   onPressed: () => context.read<QuizProvider>().restart(),
@@ -77,9 +76,8 @@ class QuizScreen extends StatelessWidget {
     final gotItRight = picked != null && question.isCorrect(picked);
     final screen = MediaQuery.sizeOf(context);
     final pad = screen.width * 0.04;
-    // Ukuran jam mengikuti lebar layar, dibatasi tinggi agar aman di landscape.
+
     final clockSize = math.min(screen.width * 0.22, screen.height * 0.16);
-    // Potret mengikuti lebar layar dan dibatasi tinggi agar aman di landscape.
     final portraitWidth = math.min(screen.width * 0.45, screen.height * 0.26);
 
     return Scaffold(
@@ -106,7 +104,7 @@ class QuizScreen extends StatelessWidget {
                         size: clockSize,
                         total: quiz.total,
                         currentIndex: quiz.currentIndex,
-                        results: quiz.results ?? const [],
+                        results: quiz.results,
                       ),
                     ),
                   ],
