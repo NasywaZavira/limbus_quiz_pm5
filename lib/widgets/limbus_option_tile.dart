@@ -4,7 +4,6 @@ import '../theme/limbus_theme.dart';
 
 enum OptionState { idle, correct, wrong }
 
-/// Satu pilihan jawaban. Warna berubah sesuai [state].
 class LimbusOptionTile extends StatelessWidget {
   const LimbusOptionTile({
     super.key,
@@ -35,9 +34,11 @@ class LimbusOptionTile extends StatelessWidget {
         fill = LimbusColors.surface;
     }
 
+    final unit = MediaQuery.sizeOf(context).shortestSide / 100;
+
     final shape = BeveledRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-      side: BorderSide(color: border, width: 2),
+      borderRadius: BorderRadius.circular(unit * 3),
+      side: BorderSide(color: border, width: unit * 0.5),
     );
 
     return Material(
@@ -47,7 +48,10 @@ class LimbusOptionTile extends StatelessWidget {
         onTap: onTap,
         child: Ink(
           decoration: ShapeDecoration(color: fill, shape: shape),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+          padding: EdgeInsets.symmetric(
+            horizontal: unit * 4.6,
+            vertical: unit * 3.6,
+          ),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(label, style: Theme.of(context).textTheme.titleMedium),
