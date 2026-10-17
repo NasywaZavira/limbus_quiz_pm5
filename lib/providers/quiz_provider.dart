@@ -48,6 +48,8 @@ class QuizProvider extends ChangeNotifier {
   bool get canResume =>
       hasQuestions && !_isFinished && !_isLoading && !_hasError;
 
+  List<bool?>? get results => null;
+
   /// Mulai kuis baru atas nama [name] (soal baru, progres dikosongkan).
   Future<void> startQuiz(String name) async {
     _playerName = name.trim();
