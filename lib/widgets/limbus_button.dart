@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../theme/limbus_theme.dart';
 
-/// Tombol selebar penuh. [secondary] = gaya garis tepi (aksi pendamping).
 class LimbusButton extends StatelessWidget {
   const LimbusButton({
     super.key,
@@ -17,6 +16,8 @@ class LimbusButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final unit = MediaQuery.sizeOf(context).shortestSide / 100;
+
     return SizedBox(
       width: double.infinity,
       child: secondary
@@ -24,11 +25,14 @@ class LimbusButton extends StatelessWidget {
               onPressed: onPressed,
               style: OutlinedButton.styleFrom(
                 foregroundColor: LimbusColors.parchment,
-                side: const BorderSide(color: LimbusColors.bronze, width: 2),
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                side: BorderSide(
+                  color: LimbusColors.bronze,
+                  width: unit * 0.5,
+                ),
+                padding: EdgeInsets.symmetric(vertical: unit * 3.6),
                 textStyle: Theme.of(context).textTheme.titleLarge,
                 shape: BeveledRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(unit * 3),
                 ),
               ),
               child: Text(label),
