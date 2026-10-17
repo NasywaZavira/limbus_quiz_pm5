@@ -112,14 +112,14 @@ Catatan:
 
 | Halaman | Tampilan |
 |---|---|
-| Layar awal | ![Layar awal](docs/screenshots/home.jpg) |
-| Layar kuis (sebelum menjawab) | ![Kuis](docs/screenshots/quiz.jpg) |
-| Layar kuis (setelah menjawab) | ![Kuis setelah menjawab](docs/screenshots/quiz-answered.jpg) |
-| Layar hasil | ![Hasil](docs/screenshots/result.jpg) |
+| Layar awal | <img src="docs/screenshots/home.jpg" alt="Layar awal" width="320" /> |
+| Layar kuis (sebelum menjawab) | <img src="docs/screenshots/quiz.jpg" alt="Kuis" width="320" /> |
+| Layar kuis (setelah menjawab) | <img src="docs/screenshots/quiz-answered.jpg" alt="Kuis setelah menjawab" width="320" /> |
+| Layar hasil | <img src="docs/screenshots/result.jpg" alt="Hasil" width="320" /> |
 
 ### Mockup / Prototype
 
-![Referensi mockup](docs/ref.png)
+<img src="docs/ref.png" alt="Referensi mockup" width="480" />
 
 [Link mockup di Figma](https://www.figma.com/design/NljHWIHWb3QzZQDVhtU84q/Projects?node-id=1584-32&t=zDHFakndzYlkoaPw-1)
 
