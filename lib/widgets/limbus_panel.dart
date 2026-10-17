@@ -2,28 +2,29 @@ import 'package:flutter/material.dart';
 
 import '../theme/limbus_theme.dart';
 
-/// Panel dengan sudut terpotong, mengikuti bentuk bingkai UI game.
 class LimbusPanel extends StatelessWidget {
   const LimbusPanel({
     super.key,
     required this.child,
     this.borderColor = LimbusColors.orange,
-    this.padding = const EdgeInsets.all(16),
+    this.padding,
   });
 
   final Widget child;
   final Color borderColor;
-  final EdgeInsets padding;
+
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
+    final unit = MediaQuery.sizeOf(context).shortestSide / 100;
     return Container(
-      padding: padding,
+      padding: padding ?? EdgeInsets.all(unit * 4),
       decoration: ShapeDecoration(
         color: LimbusColors.surface,
         shape: BeveledRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: borderColor, width: 2),
+          borderRadius: BorderRadius.circular(unit * 4),
+          side: BorderSide(color: borderColor, width: unit * 0.5),
         ),
       ),
       child: child,
