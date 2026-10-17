@@ -24,8 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     // Isi ulang nama jika pemain pernah memulai kuis sebelumnya.
-    _nameController =
-        TextEditingController(text: context.read<QuizProvider>().playerName);
+    _nameController = TextEditingController(
+      text: context.read<QuizProvider>().playerName,
+    );
   }
 
   @override
@@ -35,9 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _openQuiz() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const QuizScreen()),
-    );
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => const QuizScreen()));
   }
 
   void _start() {
@@ -61,72 +61,69 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            // Semua jarak dan ukuran dihitung dari ukuran layar yang tersedia.
-            final pad = constraints.maxWidth * 0.06;
+            // Match the prototype's upper dial and lower-middle form placement.
             final dialSize = math.min(
-              constraints.maxWidth * 0.8,
-              constraints.maxHeight * 0.45,
+              constraints.maxWidth * 0.82,
+              constraints.maxHeight * 0.38,
             );
 
             return SingleChildScrollView(
-              padding: EdgeInsets.all(pad),
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight - pad * 2,
-                ),
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    SizedBox(height: constraints.maxHeight * 0.125),
                     ClockDial(
                       size: dialSize,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text('Limbus', style: text.displayLarge),
-                          Text('Company', style: text.headlineMedium),
-                          Text('Kuis pilihan ganda', style: text.bodyMedium),
+                          Text('LIMBUS', style: text.displayLarge),
+                          Text('COMPANY', style: text.headlineMedium),
                         ],
                       ),
                     ),
-                    SizedBox(height: pad),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            controller: _nameController,
-                            maxLength: 20,
-                            textCapitalization: TextCapitalization.words,
-                            textInputAction: TextInputAction.done,
-                            decoration: const InputDecoration(
-                              labelText: 'Nama',
-                              hintText: 'Masukkan namamu',
-                              counterText: '',
+                    SizedBox(height: constraints.maxHeight * 0.155),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: constraints.maxWidth * 0.1,
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _nameController,
+                              maxLength: 20,
+                              textCapitalization: TextCapitalization.words,
+                              textInputAction: TextInputAction.done,
+                              decoration: const InputDecoration(
+                                labelText: 'Nama',
+                                hintText: 'Masukkan namamu',
+                                counterText: '',
+                              ),
+                              validator: (value) =>
+                                  (value == null || value.trim().isEmpty)
+                                  ? 'Nama tidak boleh kosong'
+                                  : null,
+                              onFieldSubmitted: (_) => _start(),
                             ),
-                            validator: (value) =>
-                                (value == null || value.trim().isEmpty)
-                                    ? 'Nama tidak boleh kosong'
-                                    : null,
-                            onFieldSubmitted: (_) => _start(),
-                          ),
-                          SizedBox(height: pad * 0.6),
-                          LimbusButton(label: 'Mulai kuis', onPressed: _start),
-                          if (canResume) ...[
-                            SizedBox(height: pad * 0.5),
+                            SizedBox(height: constraints.maxWidth * 0.025),
                             LimbusButton(
-                              label: 'Lanjutkan kuis',
-                              secondary: true,
-                              onPressed: _resume,
+                              label: 'Mulai Kuis',
+                              onPressed: _start,
                             ),
+                            if (canResume) ...[
+                              SizedBox(height: constraints.maxWidth * 0.025),
+                              LimbusButton(
+                                label: 'Lanjutkan kuis',
+                                secondary: true,
+                                onPressed: _resume,
+                              ),
+                            ],
                           ],
-                        ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: pad),
-                    Text(
-                      'Aplikasi fan-made, tidak berafiliasi dengan Project Moon.',
-                      textAlign: TextAlign.center,
-                      style: text.bodySmall,
                     ),
                   ],
                 ),
