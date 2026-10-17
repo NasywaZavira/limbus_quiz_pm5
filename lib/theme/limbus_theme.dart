@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Palet warna diambil dari UI game: latar gelap, rangka perunggu,
-/// aksen oranye, tombol merah, dan teks warna kertas tua.
 class LimbusColors {
   static const background = Color(0xFF120C0A); // latar utama
   static const surface = Color(0xFF1E1511); // isi panel
@@ -12,7 +10,7 @@ class LimbusColors {
   static const correct = Color(0xFF3DBE5A); // jawaban benar
 }
 
-ThemeData buildLimbusTheme() {
+ThemeData buildLimbusTheme(double unit) {
   final base = ThemeData.dark(useMaterial3: true);
 
   // Judul: Teko (condensed, industrial). Isi: Barlow (mudah dibaca).
@@ -22,35 +20,32 @@ ThemeData buildLimbusTheme() {
         displayColor: LimbusColors.parchment,
       )
       .apply(fontFamily: 'Barlow');
+
+  TextStyle teko(double size, FontWeight weight, Color color) => TextStyle(
+        fontFamily: 'Teko',
+        fontSize: unit * size,
+        fontWeight: weight,
+        color: color,
+      );
+
   final textTheme = body.copyWith(
-    displayLarge: const TextStyle(
-      fontFamily: 'Teko',
-      fontSize: 56,
-      fontWeight: FontWeight.w600,
-      color: LimbusColors.orange,
-    ),
-    headlineMedium: const TextStyle(
-      fontFamily: 'Teko',
-      fontSize: 32,
-      fontWeight: FontWeight.w500,
-      color: LimbusColors.parchment,
-    ),
-    titleLarge: const TextStyle(
-      fontFamily: 'Teko',
-      fontSize: 26,
-      fontWeight: FontWeight.w500,
-      color: LimbusColors.parchment,
-    ),
-    titleMedium: const TextStyle(
+    displayLarge: teko(14, FontWeight.w600, LimbusColors.orange),
+    headlineMedium: teko(8, FontWeight.w500, LimbusColors.parchment),
+    titleLarge: teko(6.5, FontWeight.w500, LimbusColors.parchment),
+    titleMedium: TextStyle(
       fontFamily: 'Barlow',
-      fontSize: 18,
+      fontSize: unit * 4.6,
       fontWeight: FontWeight.w600,
       color: LimbusColors.parchment,
     ),
+    bodyLarge: body.bodyLarge?.copyWith(fontSize: unit * 4.1),
+    bodyMedium: body.bodyMedium?.copyWith(fontSize: unit * 3.6),
+    bodySmall: body.bodySmall?.copyWith(fontSize: unit * 3.1),
   );
 
-  const bevel = BeveledRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(12)),
+  final stroke = unit * 0.5; // tebal garis tepi
+  final bevel = BeveledRectangleBorder(
+    borderRadius: BorderRadius.circular(unit * 3),
   );
 
   return base.copyWith(
@@ -74,11 +69,11 @@ ThemeData buildLimbusTheme() {
       filled: true,
       fillColor: LimbusColors.surface,
       labelStyle: textTheme.bodyMedium,
-      border: _inputBorder(LimbusColors.bronze),
-      enabledBorder: _inputBorder(LimbusColors.bronze),
-      focusedBorder: _inputBorder(LimbusColors.orange),
-      errorBorder: _inputBorder(LimbusColors.crimson),
-      focusedErrorBorder: _inputBorder(LimbusColors.crimson),
+      border: _inputBorder(LimbusColors.bronze, unit),
+      enabledBorder: _inputBorder(LimbusColors.bronze, unit),
+      focusedBorder: _inputBorder(LimbusColors.orange, unit),
+      errorBorder: _inputBorder(LimbusColors.crimson, unit),
+      focusedErrorBorder: _inputBorder(LimbusColors.crimson, unit),
     ),
     textSelectionTheme: const TextSelectionThemeData(
       cursorColor: LimbusColors.orange,
@@ -87,21 +82,20 @@ ThemeData buildLimbusTheme() {
       style: ElevatedButton.styleFrom(
         backgroundColor: LimbusColors.crimson,
         foregroundColor: LimbusColors.parchment,
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-        textStyle: const TextStyle(
-          fontFamily: 'Teko',
-          fontSize: 24,
-          fontWeight: FontWeight.w500,
+        padding: EdgeInsets.symmetric(
+          horizontal: unit * 8,
+          vertical: unit * 3.6,
         ),
+        textStyle: textTheme.titleLarge,
         shape: bevel.copyWith(
-          side: const BorderSide(color: LimbusColors.orange, width: 2),
+          side: BorderSide(color: LimbusColors.orange, width: stroke),
         ),
       ),
     ),
   );
 }
 
-OutlineInputBorder _inputBorder(Color color) => OutlineInputBorder(
-  borderRadius: BorderRadius.circular(12),
-  borderSide: BorderSide(color: color, width: 2),
-);
+OutlineInputBorder _inputBorder(Color color, double unit) => OutlineInputBorder(
+      borderRadius: BorderRadius.circular(unit * 3),
+      borderSide: BorderSide(color: color, width: unit * 0.5),
+    );
