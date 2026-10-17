@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/quiz_provider.dart';
-import '../theme/limbus_theme.dart';
 import '../widgets/limbus_button.dart';
 import '../widgets/limbus_option_tile.dart';
 import '../widgets/limbus_panel.dart';
@@ -72,8 +71,6 @@ class QuizScreen extends StatelessWidget {
     }
 
     final question = quiz.currentQuestion;
-    final picked = quiz.pickedAnswer;
-    final gotItRight = picked != null && question.isCorrect(picked);
     final screen = MediaQuery.sizeOf(context);
     final pad = screen.width * 0.04;
 
@@ -133,28 +130,6 @@ class QuizScreen extends StatelessWidget {
                         ),
                         SizedBox(height: pad * 0.7),
                       ],
-                      if (quiz.isAnswered)
-                        LimbusPanel(
-                          borderColor: gotItRight
-                              ? LimbusColors.correct
-                              : LimbusColors.crimson,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                gotItRight ? 'Benar' : 'Belum tepat',
-                                style: text.titleLarge,
-                              ),
-                              if (!gotItRight) ...[
-                                SizedBox(height: pad * 0.25),
-                                Text(
-                                  'Jawaban yang benar: ${question.correctAnswer}',
-                                  style: text.bodyLarge,
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
                     ],
                   ),
                 ),
