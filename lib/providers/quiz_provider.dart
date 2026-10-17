@@ -4,7 +4,6 @@ import '../data/question_repository.dart';
 import '../models/question.dart';
 
 /// Menyimpan nama pemain dan seluruh progres kuis di luar widget,
-/// sehingga progres tidak hilang saat layar dirotasi atau pindah halaman.
 class QuizProvider extends ChangeNotifier {
   QuizProvider({
     this._repository = const QuestionRepository(),
@@ -48,7 +47,10 @@ class QuizProvider extends ChangeNotifier {
   bool get canResume =>
       hasQuestions && !_isFinished && !_isLoading && !_hasError;
 
-  List<bool?>? get results => null;
+  List<bool?> get results => [
+      for (var i = 0; i < _questions.length; i++)
+        _answers[i] == null ? null : _questions[i].isCorrect(_answers[i]!),
+    ];
 
   /// Mulai kuis baru atas nama [name] (soal baru, progres dikosongkan).
   Future<void> startQuiz(String name) async {
