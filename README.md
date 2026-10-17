@@ -2,8 +2,6 @@
 
 Aplikasi kuis pilihan ganda bertema **Limbus Company**, dibuat dengan Flutter untuk UTS Praktikum Pemrograman Mobile. Pemain memasukkan nama, menjawab serangkaian pertanyaan tentang asal karya sastra tiap Sinner, lalu melihat skor akhir atas namanya.
 
-> Proyek fan-made untuk keperluan tugas kuliah, tidak berafiliasi dengan Project Moon.
-
 ## Identitas Mahasiswa
 
 | | |
